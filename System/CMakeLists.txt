@@ -1,112 +1,83 @@
 
-
-include_directories(./)
-include_directories(./Core)
-include_directories(./Core/include)
-include_directories(./Core/porting)
-
-include_directories(./Fs)
-include_directories(./Fs/Fatfs)
-#include_directories(./Fs/littlefs) 
-
-include_directories(./Config)
-
-#include_directories(./KLib/lvgl)
-
-#include_directories(${CMAKE_SOURCE_DIR}/Libs/src/micropython-master/)
-#include_directories(${CMAKE_SOURCE_DIR}/Libs/src/micropython-master/ports/eoslib)
-#include_directories(${CMAKE_SOURCE_DIR}/Libs/src/micropython-master/ports/eoslib/build)
-include_directories(${CMAKE_SOURCE_DIR}/Libs/src/libtommath-0.39/)
-include_directories(${CMAKE_SOURCE_DIR}/Libs/src/khicas/)
-include_directories(${CMAKE_SOURCE_DIR}/Libs/src/gmp/include/)
-
-
-aux_source_directory(.                                         SYS_SRCS)
-aux_source_directory(./Core                                    SYS_SRCS)
-aux_source_directory(./Core/porting                            SYS_SRCS)
-aux_source_directory(./Fs                                      SYS_SRCS)
-aux_source_directory(./Fs/Fatfs                                SYS_SRCS)
-#aux_source_directory(./Fs/littlefs                             SYS_SRCS)
-
-#add_subdirectory(gb)
-#add_subdirectory(KLib)
-add_subdirectory(KLib/tjpgdec)
-#add_subdirectory(emu48)
-
-add_executable(sys.elf ${SYS_SRCS})
-
-set(LINKER_SCRIPT 
-${CMAKE_SOURCE_DIR}/Script/sys_ld.script
-)
-set(LINKER_FLAGS "SHELL:-T${LINKER_SCRIPT} -Wl,--wrap=malloc -Wl,--wrap=free")
-#-Wl,--gc-sections  
-target_link_options(sys.elf PRIVATE ${LINKER_FLAGS}) 
-
+project(ExistOS)
  
-#target_compile_options(gb PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -mthumb -Ofast)
-#target_compile_options(emu48 PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -mthumb -Os)
-#target_compile_options(lvgl PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -mthumb -Os)
-target_compile_options(tjpgd PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -mthumb-interwork -mthumb -Os)
+include_directories(./FreeRTOS)
+include_directories(./FreeRTOS/include)
+include_directories(./FreeRTOS/portable)
+
+aux_source_directory(./FreeRTOS            FREERTOS_SRCS )
+aux_source_directory(./FreeRTOS/include    FREERTOS_SRCS )
+aux_source_directory(./FreeRTOS/portable   FREERTOS_SRCS )
+
+ADD_LIBRARY(freertos  ${FREERTOS_SRCS})
+
+include_directories(${CMAKE_SOURCE_DIR})
+include_directories(./)
+include_directories(./bsp)
+include_directories(./bsp/registers)
+aux_source_directory(.             SYS_SRCS)
+aux_source_directory(./bsp         SYS_SRCS)
+add_executable(sys.elf      ${SYS_SRCS})
 
 
-#-mthumb
-target_compile_options(sys.elf PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -marm
--Os -pipe 
--DHP39
-#-ffunction-sections -fno-strict-aliasing -fomit-frame-pointer
-#-fcommon -fno-strict-aliasing -fomit-frame-pointer
-#-fpermissive  -fdata-sections
-#-fno-exceptions 
-) 
 
-#set_property(TARGET lvgl PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-#set_property(TARGET gb PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+include_directories(${CMAKE_SOURCE_DIR}/system/webdata) 
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip) 
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/include) 
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/core                LWIP_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/netif               LWIP_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/arch                LWIP_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/api                 LWIP_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/core/ipv4           LWIP_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/core/ipv6           LWIP_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/apps/http           LWIP_SRCS)
+list(REMOVE_ITEM   LWIP_SRCS    ${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/apps/http/fsdata_custom.c)
+list(REMOVE_ITEM   LWIP_SRCS    ${CMAKE_SOURCE_DIR}/library/TinyUSB/lwip/apps/http/fsdata.c)
+ADD_LIBRARY(lwip_sys ${LWIP_SRCS})
 
-target_link_libraries(sys.elf -lm -lc -lrdimon -lgcc -lstdc++ -nostartfiles
-tjpgd
-#gb 
-#emu48
-#lvgl
-${CMAKE_SOURCE_DIR}/Libs/libkcasgui.libcpp
-#${CMAKE_SOURCE_DIR}/Libs/libmpy.libc
-${CMAKE_SOURCE_DIR}/Libs/libcas.libcpp
-#${CMAKE_SOURCE_DIR}/Libs/libgiac1.4.9.libcpp
-#${CMAKE_SOURCE_DIR}/Libs/libgiac1.2.0.libcpp
-${CMAKE_SOURCE_DIR}/Libs/libtommath.libcpp
-${CMAKE_SOURCE_DIR}/Libs/libgmp.libcpp   
-)
 
-# build time in UTC ISO 8601
-FILE (WRITE ${CMAKE_BINARY_DIR}/timestamp.cmake "STRING(TIMESTAMP TIMEZ UTC)\n")
-FILE (APPEND ${CMAKE_BINARY_DIR}/timestamp.cmake "FILE(WRITE timestamp.h \"#ifndef TIMESTAMP_H\\n\")\n")
-FILE (APPEND ${CMAKE_BINARY_DIR}/timestamp.cmake "FILE(APPEND timestamp.h \"#define TIMESTAMP_H\\n\\n\")\n")
-FILE (APPEND ${CMAKE_BINARY_DIR}/timestamp.cmake "FILE(APPEND timestamp.h \"#define _TIMEZ_ \\\"\${TIMEZ}\\\"\\n\\n\")\n")
-FILE (APPEND ${CMAKE_BINARY_DIR}/timestamp.cmake "FILE(APPEND timestamp.h \"#endif // TIMESTAMP_H\\n\")\n")
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/src) 
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/common   ) 
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/device   )
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/portable/chipidea/ci_hs)
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/class/net)
+include_directories(${CMAKE_SOURCE_DIR}/library/TinyUSB/networking)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/src                          TINYUSB_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/common                   TINYUSB_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/class/net                TINYUSB_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/portable/chipidea/ci_hs  TINYUSB_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/networking                   TINYUSB_SRCS)
+aux_source_directory(${CMAKE_SOURCE_DIR}/library/TinyUSB/src/device                   TINYUSB_SRCS)
+ADD_LIBRARY(tinyusb_sys ${TINYUSB_SRCS})
+     
 
-ADD_CUSTOM_TARGET (
-    timestamp
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/timestamp.cmake
-    ADD_DEPENDENCIES ${CMAKE_BINARY_DIR}/timestamp.cmake)
+target_link_libraries(sys.elf PRIVATE 
+-Wl,--wrap=_malloc_r 
+-Wl,--wrap=_free_r 
+-Wl,--wrap=printf 
+-Wl,--wrap=_printf_r
+#-Wl,--wrap=_calloc_r
+#-Wl,--wrap=_realloc_r
+ lwip_sys tinyusb_sys freertos xprintfc
+-lc -lm 
+-nostartfiles  
+-T ${CMAKE_SOURCE_DIR}/system/script/ld.lds)
+ 
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-add_dependencies(sys.elf timestamp)
+target_compile_options(xprintfc PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -mthumb  -Og   )
+target_compile_options(lwip_sys PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -marm  -Og   )
+target_compile_options(tinyusb_sys PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -marm  -Og   )
+target_compile_options(freertos PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -marm  -Og  )
+target_compile_options(sys.elf PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s -mlittle-endian -mfloat-abi=soft -marm -Og  ) 
 
-add_custom_command(TARGET sys.elf  POST_BUILD
+   
+add_custom_command(TARGET sys.elf POST_BUILD
     COMMAND arm-none-eabi-size ${CMAKE_CURRENT_BINARY_DIR}/sys.elf 
     )
 
 add_custom_target(
-  ExistOS.sys ALL
-  COMMAND ${CMAKE_OBJCOPY} -I elf32-little -O binary -R .note -R .comment -S ${CMAKE_CURRENT_BINARY_DIR}/sys.elf ${CMAKE_CURRENT_BINARY_DIR}/ExistOS.sys 
-  COMMAND ${CMAKE_NM} -n ${CMAKE_CURRENT_BINARY_DIR}/sys.elf > ${CMAKE_CURRENT_BINARY_DIR}/sys_symtab.txt 
-  COMMAND ${CMAKE_SOURCE_DIR}/tools/sysigner ${CMAKE_CURRENT_BINARY_DIR}/sys_symtab.txt ${CMAKE_CURRENT_BINARY_DIR}/ExistOS.sys 
+  sys.bin ALL
+  COMMAND ${CMAKE_OBJCOPY} -I elf32-little -O binary -R .note -R .comment -S ${CMAKE_CURRENT_BINARY_DIR}/sys.elf ${CMAKE_CURRENT_BINARY_DIR}/sys.bin 
   DEPENDS sys.elf 
   )
 
-  add_custom_target(
-    edb_flash_sys 
-    COMMAND ${CMAKE_SOURCE_DIR}/tools/edb -r -s -f ${CMAKE_CURRENT_BINARY_DIR}/ExistOS.sys 1984
-    DEPENDS ExistOS.sys
-    )
-
-add_dependencies(edb_flash_sys timestamp)

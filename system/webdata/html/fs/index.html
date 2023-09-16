@@ -1,0 +1,70 @@
+<meta charset="UTF-8">
+<html>
+<style>
+
+.screen-container {
+    width: 400px;  
+    height: 200px;  
+    overflow: hidden; 
+}
+
+.screen-container img {
+    transform-origin: top left;  
+    transform: scale(1.5); 
+}
+
+</style>
+
+<head>
+  <title>Exist OS Debug View</title>
+</head>
+
+<body>
+  <div class="screen-container">
+    <img id="screenView" src="screen.bmp">
+  </div>
+  <div class="stdout-container">
+    <textarea id="stdout" rows="25" cols="80"></textarea>
+  </div>
+
+</body>
+
+<script>
+  const img = document.getElementById('screenView');
+  var tick = 1;
+
+  function getContentFromServer() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/getStdout', true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const responseText = xhr.responseText;
+                    const stdout = document.getElementById('stdout');
+                    stdout.value = stdout.value + responseText;
+                    
+                    stdout.scrollTop = stdout.scrollHeight;
+                    
+                } else {
+                    console.error('Fetch Stdout ERROR:' + xhr.status);
+                }
+            };
+            xhr.send();
+        }
+
+  function getScreen() {
+    tick++;
+    if((tick % 3000) == 0)
+    {
+      var randomParam = new Date().getTime();
+      img.src = 'screen.bmp' + '?' + randomParam;
+    }
+    if((tick % 200) == 0)
+    {
+      getContentFromServer();
+    }
+  }
+  setInterval(getScreen, 1); 
+</script>
+
+</html>

@@ -1,3 +1,0 @@
-[submodule "tools/edb-unix"]
-	path = tools/edb-unix
-	url = https://github.com/ExistOS-Team/edb-unix

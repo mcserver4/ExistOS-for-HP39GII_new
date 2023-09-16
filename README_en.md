@@ -1,48 +1,51 @@
- ___This English readme may not be up to date with the [Chinese version](./README.md).___
-
 # [ExistOS-For-HP39GII](https://github.com/Repeerc/LibreCalc-For-HP39GII)
+
+[中文自述文件](./README.md)
 
 An open source HP39GII firmware project
 
-## Project Overview
+## Project overview
 
 [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.png?v=103)](https://opensource.org/licenses/GPL-3.0/)
-[![Build Status](../../actions/workflows/build.yml/badge.svg)](../../actions/workflows/build.yml)
+[![Build Status](https://github.com/ExistOS-Team/ExistOS-For-HP39GII/actions/workflows/build.yml/badge.svg)](https://github.com/ExistOS-Team/ExistOS-For-HP39GII/actions/workflows/build.yml)
 
-This firmware project is created by a group of calculator enthusiasts, using libraries such as [FreeRTOS kernel](https://github.com/FreeRTOS/FreeRTOS), [TinyUSB](https://github.com/hathach/tinyusb), [FatFs](http://elm-chan.org/fsw/ff/00index_e.html), [dhara](https://github.com/dlbeer/dhara), [giac](http://www-fourier.ujf-grenoble.fr/~parisse/giac.html), etc. Like-minded friends are more than welcome to try out and improve the code of this project. We'd love to hear your voices!
-
-Refer to the [Install Guide](#only-installing) for installing procedures.
-
-# Note: The following features mainly applies to Build 70 and older versions.
+This firmware project is created by a group of calculator enthusiasts, using libraries such as [FreeRTOS kernel](https://github.com/FreeRTOS/FreeRTOS), [TinyUSB](https://github.com/hathach/tinyusb), [FatFs](http://elm-chan.org/fsw/ff/00index_e.html), [dhara](https://github.com/dlbeer/dhara), etc. Like-minded friends are more than welcome to try out and improve the code of this project. We'd love to hear your comments!
 
 ## Contents
 
-| | User Guide | |
-| :---: | :---: | :---: |
-| [Current Development Status](#current-developping-status) | | [Experimental Fautures](#experimental-features) |
-| | **[Install Guide](#only-installing)** | |
-| For Windows 10/11 | [ExistOS Updater](#for-windows-10--11-existos-updater) | Automated tools for beginers |
-| Win/Linux | [OS Loader & EDB](#for-windows--linux) | |
-| Windows | [Emulator](#emulator) | |
-| | **[Usage](#basic-usage-of-the-firmware)** | |
-| [Setup](#booting-for-the-first-time) | [Shortcuts](#shortcuts) | [Accessing Internal Storage](#accessing-internal-storage) |
-| **[Basic Usage of KhiCAS](#basic-usage-of-khicas)** | [Basic Calculations](#basic-calculations) | [Example 1: Plotting](#example-1-plotting) |
-| | [Example 2: Indefinite Integrals](#example-2-indefinite-integrals) | [Example 3: Definite Integrals](#example-3-definite-integrals) | 
-| | [Example 4: Programming to draw Feigenbaum bifurcation diagrams mapped with Logistic equations](#example-4-programming-to-draw-feigenbaum-bifurcation-diagrams-mapped-with-logistic-equations) | |
-| **[Experimental Features](#about-experimental-features) | [Charging](#charging-not-fully-tested) | [Emu48 39/48 Emulator](#emu48-3948-saturn-emulator) |
-| **[Uninstalling and Flashing Back](#uninstalling-existos-and-flashing-back-to-the-hp-firmware)** | **[Contributors](#contributors)** | **[License](#license)** |
+- [ExistOS-For-HP39GII](#existos-for-hp39gii)
+  - [Project overview](#project-overview)
+  - [Contents](#contents)
+  - [Current development status](#current-development-status)
+	- [Experimental features](#experimental-features)
+  - [Compiling](#compiling)
+    - [Prerequisites](#prerequisites)
+      - [Windows](#windows)
+      - [Linux](#linux)
+        - [Add udev rules](#add-udev-rules)
+        - [Compiling sbtool](#compiling-sbtool)
+    - [Compiling ExistOS](#compiling-existos)
+  - [Installing firmware (Currently only works under Windows)](#installing-firmware-currently-only-works-under-windows)
+    - [Flashing OSLoader](#flashing-osloader)
+      - [Manual flashing](#manual-flashing)
+      - [Flashing with automated tools](#flashing-with-automated-tools)
+  - [Basic usage of firmware](#basic-usage-of-firmware)
+    - [Booting for the first time](#booting-for-the-first-time)
+    - [Accessing internal storage](#accessing-internal-storage)
+    - [Basic usage of KhiCAS](#basic-usage-of-khicas)
+      - [Basic calculations](#basic-calculations)
+      - [Example 1: Plotting](#example-1-plotting)
+      - [Example 2: Indefinite integrals](#example-2-indefinite-integrals)
+      - [Example 3: Definite integrals](#example-3-definite-integrals)
+      - [Example 4: Programming to draw Feigenbaum bifurcation diagrams mapped with Logistic equations](#example-4-programming-to-draw-feigenbaum-bifurcation-diagrams-mapped-with-logistic-equations)
+  - [Uninstalling ExistOS and flashing back to stock system](#uninstalling-existos-and-flashing-back-to-stock-system)
+  - [Code submision standard](#code-submission-standard)
+  - [Contributors](#contributors)
+  - [License](#license)
 
-| | Developer Guide | |
-| :---: | :---: | :---: |
-| [Current Development Status](#current-developping-status) | | [Experimental Fautures](#experimental-features) |
-| | **[Comiling and Installing](#compiling-and-installing)** | |
-| [Prerequisites](#prerequisites) | [Compiling ExistOS](#compiling-existos) | [Flash firmware](#installing) |
-| | **Code contribution** | |
-| Documents (To do) | [Third-party App developing](#third-party-app-developing) | [Code submision standard](#code-submission-standard) |
-| **[Uninstalling and Flashing Back](#uninstalling-existos-and-flashing-back-to-the-hp-firmware)** | **[Contributors](#contributors)** | **[License](#license)** |
 
-## Current Developping Status
 
+## Current development status
 - [x] Boot
 - [x] Serial debugging
 - [x] LCD driver supporting 256 shades of grey
@@ -50,7 +53,7 @@ Refer to the [Install Guide](#only-installing) for installing procedures.
 - [x] Keyboard driver (GPIO polling)
 - [x] Timer driver
 - [x] Setting CPU frequency
-- [x] Real-time clock
+- [ ] Real-time clock
 - [x] USB mass storage device mode
 - [x] USB serial console
 - [x] USB keyboard & mouse emulation
@@ -59,7 +62,7 @@ Refer to the [Install Guide](#only-installing) for installing procedures.
 - [x] FATFS implementation
 - [x] Multitasking
 - [x] Virtual memory
-- [x] Loading applications
+- [ ] Loading applications
 - [x] Miminal MicroPython implementation
 - [x] Graphical user interface
 - [x] Basic power management
@@ -69,275 +72,188 @@ Refer to the [Install Guide](#only-installing) for installing procedures.
 ### Experimental features
 
 - [x] Charging Ni-Mh batteries in the compartment via USB power
-- [x] Running hp39g firmware with Saturn emulator
-- [ ] Running hp48g firmware with Saturn emulator
+
+
 
 Current development status is as described above. User interface etc. are still under discussion. You may open an issue to give your opinion.
 
-## Only Installing
 
-### For Windows 10 / 11: ExistOS Updater
+## Compiling
 
-Requires:
-
-- Firmware: Download from [here](https://github.com/ExistOS-Team/ExistOS-For-HP39GII/releases).
-  - Download `OSLoader.sb` and `ExistOS.sys`.
-- ExistOS Updater: Download from [here](https://github.com/ExistOS-Team/ExistOS_Updater_v2/releases).
-  - Only supports Windows 10 / 11.
-
-Then follow the [instructions](https://github.com/ExistOS-Team/ExistOS_Updater_v2#readme) to flash the firmware.
-
-### For Windows / Linux
-
-Requires:
-
-- Firmware: Download from [here](https://github.com/ExistOS-Team/ExistOS-For-HP39GII/releases).
-  - Download `OSLoader.sb` and `ExistOS.sys`.
-- sb_loader: Used to send OSLoader to the RAM of your calculator if you haven't installed it before.
-  - Windows: Download binary file from [here](../../raw/main/tools/sbtools_win/sb_loader.exe).
-  - Linux: Download zip file from [here](../../archive/refs/heads/main.zip) and extract it. Then run the following commands:
-    - Install `crypto++` library. Following the "Install dependencies" section [here](#Prerequisites)
-    - `cd tools/sbtools/`
-    - `make`
-    - Then you will get the executable file `sb_loader`
-- EDB (ExistOS Debug Brige): Used to flash firmwares.
-  - Windows: Download binary file from [here](../../raw/main/tools/edb.exe).
-  - Linux: Download zip file from [here](https://github.com/ExistOS-Team/edb-unix/archive/refs/heads/master.zip) and extract it. Then run the following commands:
-    - `mkdir build`
-    - `cmake -B build`
-    - `cmake --build build`
-    - Then you will get the executable file `edb`
-
-Put the mentioned files to a directory.
-
-If you haven't installed ExistOS on your calculator, please go through this to-do list first:
-1. Remove all batteries from your calculator.
-2. Hold `ON/C` key and connect your calculator to computer via USB cable.
-3. Run command `sbloader OSLoader.sb`
-  - Normally your calculator will boot into the OSLoader, and then a message will show up on the screen. There is no need to unplug the USB cable now. Just continue to do the following steps.
-  - ![OSL Boot](Image/1.png)
-
-If ExistOS has already been installed on your device:
-1. Connect your calculator to computer via USB cable.
-2. Run command `edb -r -f OSLoader.sb 1408 b` to flash the OSLoader.
-  - Your calculator will reboot automatically.
-3. Run command `edb -r -f ExistOS.sys 1984` to flash the System.
-  - Your calculatr will reboot automatically.
-1. Enjoy ExistOS!
-  - If you are in trouble with the installation or anything else, open an issue or join our Discord server to seek for help.
-
-## Compiling and Installing
+- If you just want to try out the system instead of compiling it yourself, binaries are available at [Release](https://github.com/ExistOS-Team/ExistOS-For-HP39GII/releases). Then jump to [Flashing with automated tools](#flashing-with-automated-tools) section for instructions.
 
 ### Prerequisites
 
-Clone the git repo first:
+You need to install `gcc-arm-none-eabi` first.
+- For Windows, please download from [here](https://developer.arm.com/downloads/-/gnu-rm).
+  - Please note that you'll need to add the path to `bin` folder under the installation directory to the environment variable `Path`.
+- For Linux, differences exist between distros.
+  - Debian/Ubuntu or other distros using `apt` package manager
+    ```bash
+    sudo apt-get install gcc-arm-none-eabi -y
+    ```
+  - Arch or other distros using `pacman` package manager
+    ```bash
+    sudo pacman -Syu arm-none-eabi-gcc
+    ```
+- For other operating systems or Linux distros without corresponding packages
+  - Download source code from [here](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/downloads) and compile.
+
+#### Windows
+
+Please download [Ninja](https://github.com/ninja-build/ninja/releases) and extract it. Then add its path to the environment variable 'Path'.
+
+#### Linux
+
+###### Add udev rules
+
+For Linux, to allow HP39GII to be detected by udev, you need to copy `99-hp39gii.rules` to  `/etc/udev/rules.d/`.
 ```bash
-git clone https://github.com/ExistOS-Team/ExistOS-For-HP39GII.git # https
-git clone git@github.com:ExistOS-Team/ExistOS-For-HP39GII.git # ssh
+sudo cp 99-hp39gii.rules /etc/udev/rules.d/
 ```
-Then enter the directory:
+
+Then restart `udev`.
 ```bash
-cd ExistOS-For-HP39GII
+sudo service udev restart
 ```
-Switch to the root directory of this project first.
 
-Note:
-- `gcc-arm-none-eabi` v10.3 is tested OK. Download binary executable files from [here](https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2).
-  - Using other versions of GCC may cause OSLoader to not run.
+In case it doesn't work:
+```bash
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
 
-|System|Install|
-|----|----|
-|Windows|Download from [here](https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-win32.exe?rev=29bb46cfa0434fbda93abb33c1d480e6&hash=B2C5AAE07841929A0D0BF460896D6E52) and install `gcc-arm-none-eabi`|
-||Do not forget to add directory to the PATH environment variable|
-|Debian & Ubuntu|`apt-get install gcc-arm-none-eabi`|
-|Arch Linux|`pacman -Syu arm-none-eabi-gcc`|
-|Other|Lookup if there are binary packages provided. Or you can build from [source code](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/downloads)|
-||The link above is the new version. You can download the old version (V10.3) from [here](https://developer.arm.com/downloads/-/gnu-rm#panel1a)|
+##### Compiling sbtool
 
-Add `udev` rule:
-|System|Install|
-|----|----|
-|Windows|N/A|
-|Linux|`sudo cp 99-hp39gii.rules /etc/udev/rules.d/`|
-||Then restart `udev` to load the new rule:|
-||`sudo service udev restart`|
-||If commands above didn't work:|
-||`sudo udevadm control --reload-rules`|
-||`sudo udevadm trigger`|
-|Other distros using `udev`|Copy `99-hp39gii.rules` in the project to the directory containing `udev` rules, then restart `udev`|
+This tool for Windows has been compiled in advance, but you need to compile it if you use Linux.
 
-Install compiler:
-|System|Install|
-|----|----|
-|Windows|Download binary executable of [Ninja](https://github.com/ninja-build/ninja/releases), extract it to a directory and add it your PATH|
-|Debian & Ubuntu|`apt-get install cmake make`|
-|Arch Linux|`pacman -Syu cmake make`|
+Enter `tools/sbtools` and execute command `make`. You might need to install the libraries below.
+- libusb(1.0)
+- libcrypto++
+  - Installation tutorial is in [Crypto++ Wiki](https://cryptopp.com/wiki/Linux#Distribution_Package)
 
-Install dependencies:
-|System|Install|
-|----|----|
-|Windows|N/A|
-|Debian|`apt-get install libcrypto++-dev libusb-1.0.0-dev`|
-|Ubuntu|`apt-get install libcrypto++6 libcrypto++-dev libusb-1.0.0-dev`|
-|Arch Linux|`pacman -Syu libusb crypto++`|
-|Others|Install libusb 1.0, [libcrypto++](https://cryptopp.com/wiki/Linux#Distribution_Package)|
-||Check installtion with `pkg-config`|
+- For Ubuntu, please install libraries according to the Action configurations of this project
+  ```bash
+  sudo apt-get install libcrypto++6 libcrypto++-dev libusb-1.0-0-dev -y
+  ```
+- Arch
+  ```bash
+  sudo pacman -Syu libusb crypto++
+  ````
 
-_Tips: `pkg-config` will search for libraries according to `/usr/lib/pkgconfig/*.pc`. If you would like to manually add libraries, please modify `CMakeLists.txt` to correct paths._
+If `pkg-config` cannot find libcrypto++ or other libraries, please ensure that there are `.pc` files of the library under `/usr/lib/pkgconfig/`, which is necessary for it to be detected by `pkg-config`.
 
-Build `sbtool`:
-|System|Install|
-|----|----|
-|Windows|Pre-compiled executable in `tools/`|
-|Linux|`cd tools/sbtools/ && make`|
-||`cp sb_loader ../`|
-||`cp elftosb ../`|
-||`cd ../../`|
-||`cd Libs/src/micropython-master/ports/eoslib/ && make`|
-||`cd ../../../../../`|
+If the files exist, please modify Makefile. Otherwise, you may need to reinstall the library or modify the pkg-config command in Makefile.
 
-Build `EDB`:
-|System|Install|
-|----|----|
-|Windows|Pre-compiled executable in `tools/`|
-|Linux|`cd tools/`|
-||`git clone https://github.com/ExistOS-Team/edb-unix.git`|
-||`cd edb-unix/`|
-||`mkdir build`|
-||`cmake -B build/`|
-||`cmake --build build/`|
-||`cp build/edb ../`|
-||`cd ../../`|
-
-Build sys_signer:
-|System|Install|
-|----|----|
-|Windows|Pre-compiled executable in `tools/`|
-|Linux|`cd tools/sys_signer/`|
-||`mkdir build`|
-||`cmake -B build/`|
-||`cmake --build build/`|
-||`cp build/sys_signer ../`
-||`cd ../../`|
+Then enter `Libs/src/micropython-master/ports/eoslib` and execute command `make`.
+```bash
+cd Libs/src/micropython-master/ports/eoslib
+make
+```
 
 ### Compiling ExistOS
 
-Create a new directory to store binary files and caches:
+Create a new directory to store binary files and cache
 ```bash
 mkdir build
 cd build
 ```
 
-Preparing to compile:
-|System|Install|Note|
-|----|----|----|
-|Windows|`cmake .. -G Ninja`|Specifies `Ninja` as complier|
-|Linux|`cmake ..`||
+Preparing to compile
+  - Linux
+    ```bash
+    cmake ..
+    ```
+  - Windows
+    ```bash
+    cmake .. -G Ninja
+    ```
 
-Compiling:
-|System|Install|
-|----|----|
-|Windows|`ninja`|
-|Linux|`make`|
+Compiling
+  - Linux
+    ```bash
+    make
+    ```
+  - Windows
+    ```bash
+    ninja
+    ```
 
-### Installing
+## Installing firmware (Currently only works under Windows)
 
-#### OSLoader in RAM (temporarily)
+### Flashing OSLoader
 
-Note: Please install drivers for HP39GII on your own.
+Note: Please install drivers for HP39GII yourself.
 
-You can skip this step if the OSLoader has been installed on your device (unless it's bricked.)
+OSLoader boots ExistOS and provides low-level API and virtual memory functionalities. Run commands below to load OSLoader into the calculator's RAM. (Calculator is required to be in flashing mode.)
 
-OSLoader boots ExistOS and provides low-level APIs and virtual memory service. Run commands below to load the OSLoader temporarily.
+Before flashing, please power off your calculator completely by removing the batteries, then plug in USB cable while holding down the `ON/C` key. Your calculator will then enter flashing mode.
 
-Before flashing, power off your calculator completely by removing the batteries, and then plug in USB cable while holding down the `ON/C` key. Then your calculator will enter the flashing mode.
-
-An HID device named "USB Input Device" with the ID of 066F:3770 will show up in the Device Manager under Windows.
+You can see if an HID device named "USB Input Device" with the ID of 066F:3770 shows up in Device Manager under Windows.
 
 ![USBID](Image/0.png)
 
-|System|Install|
-|---|---|
-|Windows|`ninja sb_flash`|
-|Linux|`make sb_flash`|
 
-#### OSLoader
+#### Manual flashing
 
-|System|Install|
-|----|----|
-|Windows|`ninja edb_flash_loader`|
-|Linux|`make edb_flash_loader`|
+First, use sbtool to load OSLoader into the calculator's RAM:
+```bash
+ninja sb_flash
+```
+After OSLoader has been running, the calculator will display the following screen saying "Could not find the System":
 
-This will flash OSLoader to the calculator.
+![OSL Boot](Image/1.png)
 
-Your calculator will reboot automatically.
+Right now OSLoader is only running off RAM, proceed to execute following commands to flash OSLoader to the boot sector on the flash of the calculator:
+```bash
+ninja edb_flash_loader
+```
+The calculator will then reboot automatically, but no system will be found. Lastly the following commands are required to flash the system onto the flash:
+```bash
+ninja edb_flash_sys
+```
+After the process finishes the calculator will reboot automatically and run normally. If it does not respond for an extended period of time, please try flashing from the beginning.
 
-#### ExistOS
+#### Flashing with automated tools
 
-|System|Install|
-|----|----|
-|Windows|`ninja edb_flash_sys`|
-|Linux|`make edb_flash_sys`|
+[ExistOS Updater](https://github.com/ExistOS-Team/ExistOS_Updater_v2/releases) (available on Windows 10 and newer versions) can be used to flash OSLoader and System.
 
-This will install ExistOS on your calculator.
+For devices that doesn't have OSLoader (e.g. devices with stock firmware), please turn off the calculator completely, then connect it to computer while holding down `ON/C` key. Click `Refresh` button on the updater. If the status bar says `Device Connected [HostLink Mode]`, OSLoader and System images can be selected, then flashed onto the device by clicking `Update OSLoader & System`.
 
-Your calculator will reboot automatically.
+For devices that already has OSLoader installed, you'll only need to turn on the device, connect it to computer, click `Refresh` button, wait for the status bar to show `Device Connected [Bin Mode EDB]` and proceed to flash.
 
-## Emulator
+Or you can try to install stock tools and use Firmware Updater to flash OSLoader by renaming `OSLoader.sb` to `firmware.sb` and replacing the stock file with it.
 
-Experience ExistOS first with ExistOS Emulator for Windows.
-
-![Emulator](Image/46.png)
-
-Download from [here](https://github.com/ExistOS-Team/ExistOS-Emulator/releases/tag/Latest).
-
-### File transfer
-
-After system finishes booting, drag & drop files onto the emulator window to transfer them.
-
-### Updating system
-
-Replace ExistOS.sys directly.
-
-## Basic Usage of the Firmware
+## Basic usage of firmware
 
 ### Booting for the first time
 
-During the first boot after the installation you will see the following dialog, prompting you to format the data section of the flash as FAT16. Press `ENTER` to confirm the operation, which usually takes around 30 seconds.
+After booting and flashing, the first time the system boots you'll see the following dialog, prompting you to format the data section of the flash as FAT16. Press `ENTER` to confirm the operation. It usually takes around 30 seconds.
 
 ![Sys1](Image/2.png)
 
-This screen indicates a successful formatting attempt. Select OK to enter the main menu.
+This screen indicates a successful format. Select OK to enter the main menu.
 
 ![Sys1](Image/3.png)
 
-This system only comes with a KhiCAS application for now. Press `←` `→` `↑` `↓` to navigate and `ENTER` to confirm.
+The system only comes with a KhiCAS application for now. Press `←` `→` `↑` `↓` to navigate, `ENTER` to confirm.
 
 ![Sys1](Image/4.png)
 
-The Files tab is the file explorer that is capable of viewing jpg pictures, playing mjpeg encoded avi videos and executing .exp ExistOS applications. No other file managing functions are implemented now.
-
-![Sys1](Image/4-1.png)
-
-The Status tab shows system status and related settings.
+The Status tab currently shows the system status.
 
 ![Sys1](Image/5.png)
 
-![Sys1](Image/5-1.png)
-
-### Shortcuts
-
-`ON` + `F5`: Enter the maintenance menu
-
-`ON` + `[+]` / `[-]`: Adjust the contrast
+`ON` + `F6` Force reboot  
+`ON` + `F5` Enter formatting interface
 
 ### Accessing internal storage
 
-Holding down the `F2` key while booting (or immediately after pressing the `ON/C` key) will bring up the following interface:
+Holding down `F2` while booting (or immediately after pressing `ON/C`) will bring up the following interface:
 
 ![Sys1](Image/38.png)
 
-An 80 MB USB drive, the data section of the onboard flash, will show up on your computer. The `System` directory stores the assets, for example, fonts and pictures (Unused right now). The `xcas` directory stores KhiCAS user scripts, sessions (history) and other datas.
+A 80 MB USB drive will then show up on the computer, which is the data section of the onboard flash. `System` directory stores assets e.g. fonts and pictures which are unused right now. `xcas` directory stores KhiCAS user scripts, sessions (history) and other information.
 
 ![Sys1](Image/39.png)
 
@@ -345,25 +261,25 @@ An 80 MB USB drive, the data section of the onboard flash, will show up on your 
 
 ### Basic usage of KhiCAS
 
-Press `↓` to select the KhiCAS app under the Application tab in the main menu, and press `ENTER` to launch it. A dialog will show up on the first launch, which is for you to choose between Xcas mode `F1` and Python mode `F6`.
+Press `↓` to select the KhiCAS app under the Application tab in the main menu, and press `ENTER` to launch. A dialog will show up on the first launch for you to choose between Xcas mode `F1` and Python mode `F6`.
 
 ![Sys1](Image/6.png)
 
-After the configurations, the current status is shown on the status bar below. The first item is the current time, the second is the mode (Xcas or Python), the third is the filename of the current session.
+After configuration, the current state is shown on the status bar below. The first item is current time, the second is mode (Xcas or Python), the third is the filename of the current session.
 
-Use `time(hh, mm)` to set the time.
+Note: RTC interface is not ported for now, thus time might be shown incorrectly.
 
 ![Sys1](Image/7.png)
 
-Calculations can be performed after initialization.
+Calculations may be performed after initialization.
 
-Long press the `ON/C` key to clear the history.
+Long press `ON/C` to clear history.
 
-Press `SHIFT` + `ON/C` to save the session and quit KhiCAS.
+Press `SHIFT` then long press `ON/C` to save session and shutdown.
 
 #### Basic calculations
 
-General expressions can be entered in KhiCAS to perform calculations. Calculation of large integers is supported. However for floating point calculation, only single-percision floating point numbers calculation is supported.
+General expressions can be entered in KhiCAS to perform calculations. Calculation of large integers is supported, however for floating point calculation, only single-percision floating point numbers are supported.
 
 ![Sys1](Image/8.png)
 
@@ -379,7 +295,7 @@ Press `F1` and `F2` to bring up *could-be* commonly-used commands menu.
 
 ![Sys1](Image/12.png)
 
-The `cmds` menu (`F4`) lists all available commands in KhiCAS as nested entries, including algebraic, complex, polynominal, probability, plotting, etc., where you can search commands needed. After selecting the command, press `Input` to copy them to the main menu, `ex1` `ex2` to copy built-in examples or `help` to show built-in help.
+`cmds` menu (`F4`) lists all available commands in KhiCAS as nested entries, including algebraic, complex, polynominal, probability, plotting, etc., where you can search commands needed. After selecting the command, press `Input` to copy to the main menu, `ex1` `ex2` to copy built-in examples or `help` to show built-in help.
 
 ![Sys1](Image/13.png)
 
@@ -430,6 +346,8 @@ Use `plot` command to plot functions. In the plot interface: Press `↑` `↓` `
 ![Sys1](Image/37.png)
 
 #### Example 4: Programming to draw Feigenbaum bifurcation diagrams mapped with Logistic equations
+
+*(what)*
 
 Two input syntax modes are present in KhiCAS, namely Xcas and Python. With the ability to execute scripts, new functions can be defined via programming. Here we use Python syntax to implement the following bifurcation diagram.
 
@@ -482,54 +400,20 @@ Final output:
 
 ![Sys1](Image/35.png)
 
-## About Experimental Features
+Note:
 
-### Charging (Not fully tested)
+Since the giac algebra system is relatively large (about 3MB) and the calculator has only about 300KB of physical memory, the virtual memory on the flash is used here to fill the gap. For example, in drawing the bifurcation diagram above, the Python script iterates internally about 2000 times, and the final result occupies about 90KB of memory, but eventually takes up to 340 seconds, triggering a total of 440,000 memory swaps and generating about 3 full flash P/E cycles.
 
-ExistOS supports controlling the DC-DC and linear regulators inside the SoC to step-down 5V USB voltage, feeding 1.4V to the battery compartment. Make sure you're using rechargable batteries when using this feature to avoid possible danger.
+## Uninstalling ExistOS and flashing back to stock system
 
-Usage: Plug in USB cable and switch to the `Status` tab. Scroll to the bottom and tick `Enable Charge` to start charging. The core temperature shown above may rise up to 50℃, since the voltage regulators are integrated in the same chip along with the CPU.
-
-![Sys1](Image/41.png)
-
-The following system status graph was drawn charging one AAAA battery rated 400mAh 1.2V for 6 hours.
-
-![Sys1](Image/42.png)
-
-The following system status graph was drawn discharging one AAAA battery rated 400mAh 1.2V for 2 hours.
-
-![Sys1](Image/43.png)
-
-### Emu48 39/48 Saturn Emulator
-
-This application runs the firmware of HP39/48 calculators by running a Saturn emulator. Right now it only supports loading the HP 39g firmware, leaving quitting the emulator and saving user data unfinished. Optimizations are also not applied yet, so expect a slow speed.
-
-Usage: Put `rom.g39` (1MB) to the root directory of the calculator's internal storage, then start `Emu48` from the main menu.
-
-Reboot: `ON + F6`
-
-Shut down: `ON + F3`
-
-![Sys1](Image/44.png)
-
-![Sys1](Image/45.png)
-
-## Uninstalling ExistOS and Flashing Back to the HP Firmware
-
-You need to erase the whole flash before flashing back to the HP Firmware, otherwise you'll get stuck at the formatting progress when using the official update tool.
+You need to erase the whole flash before flashing back to the stock system, otherwise you'll get stuck at the formatting procedure when using the stock flashing tool.
 
 How to erase the whole flash:  
-After flashing OSLoader or while ExistOS is running, press `ON`+`F5` to enter the maintenance menu, and then press `F2` to erase the flash. ___This operation cannot be undone.___ When the screen shows "Flash Cleared", connect the calculator to a computer and launch the official update tool under 7 / XP to flash your calculator back to the HP firmware.
+After flashing OSLoader or while ExistOS is running, press `ON`+`F5` to enter the data clearing interface, then press `SYMB` to enter the full disk erase interface and pressing `F1` will confirm the operation. This cannot be undone. When the screen shows "Operation Finish", power cycle the calculator and launch the stock flash tool under Windows 7/XP to flash back to the stock system.
 
-## Third-party App Developing
+## Code submission standard
 
-ExistOS APP Demo Repo:
-
-https://github.com/ExistOS-Team/ExistOS-App-demo
-
-## Code Submission Standard
-
-**If you want to contribute to this project, please follow the standards below**
+**If you want to contibute code, please follow these standards**
 
 1. Variable
 
@@ -630,13 +514,8 @@ For VSCode users, `clang-format` extension is available to format the code conve
 
 ## Contributors
 
-<a href = "https://github.com/ExistOS-Team/ExistOS-For-HP39GII/graphs/contributors">
-  <img src = "https://contrib.rocks/image?repo=ExistOS-Team/ExistOS-For-HP39GII"/>
-</a>
 
-Special thanks to:
-- [parisseb](https://github.com/parisseb)
 
 ## License
 
-[GPL-3.0](./LICENSE)
+[GPL-3.0](https://github.com/Repeerc/LibreCalc-For-HP39GII/blob/master/LICENSE)

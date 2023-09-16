@@ -1,4 +1,0 @@
-freeze(
-    ".",
-    "frozentest.py",
-)

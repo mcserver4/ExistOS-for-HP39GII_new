@@ -1,6 +1,0 @@
-
-include_directories(.)
-
-AUX_SOURCE_DIRECTORY(. DIR_LIBELF_SRCS)
-
-ADD_LIBRARY(libelf ${DIR_LIBELF_SRCS})

@@ -1,0 +1,314 @@
+<meta charset="UTF-8">
+<html>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body {
+    font: 100% Verdana, Arial, Helvetica, sans-serif;
+    background: #333333;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #000000;
+  }
+
+  .header {
+    background-color: rgb(80, 80, 80);
+    margin-left: 0px;
+    font-size: 20px;
+    text-align: center;
+    color: #F57F17;
+    margin-left: 15%;
+    margin-right: 15%;
+  }
+
+  .info {
+    background-color: rgb(80, 80, 80);
+    font-size: 20px;
+    color: #ee4444;
+    text-align: right;
+    margin-left: 15%;
+    margin-right: 15%;
+  }
+
+  .Grid {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  li {
+    height: 30px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+  .Grid-cell1 {
+    width: 182px;
+    background-color: rgb(80, 80, 80);
+    margin-left: 15%;
+    font-size: 20px;
+    text-align: center;
+    color: #F57F17;
+  }
+
+  .Grid-cell2 {
+    flex: 1;
+    background-color: rgb(240, 240, 240);
+    margin-left: 10px;
+    margin-right: 15%;
+  }
+
+  .Grid-cell2 {
+    height: 340px;
+  }
+
+  input {
+    font-size: 20px;
+  }
+
+  button {
+    font-size: 20px;
+  }
+
+  .flash {
+    font-size: 25px;
+  }
+
+  .tabs {
+    width: 100%;
+    height: 100%;
+    background-color: #dddddd;
+    font-size: 20px;
+    display: none;
+  }
+
+
+  @-webkit-keyframes spin {
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  .div-waiting {
+    position: fixed;
+    z-index: 998;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.2);
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .icon-waiting {
+    position: relative;
+    top: 48%;
+    width: 5rem;
+    height: 5rem;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 0.5rem solid rgba(21, 21, 21, 0.4);
+    border-top-color: #e1e1e1;
+    -webkit-animation: 1.5s spin infinite linear;
+    animation: 1.5s spin infinite linear;
+  }
+
+  .icon-position {
+    position: relative;
+    top: 48%;
+    margin: 0 auto;
+    font-size: 30px;
+  }
+
+
+
+  thead,
+  tfoot {
+    background-color: #3f87a6;
+    color: #fff;
+  }
+
+  tbody {
+    background-color: #e4f0f5;
+  }
+
+  table {
+    border-collapse: collapse;
+    border: 2px solid rgb(200, 200, 200);
+    letter-spacing: 1px;
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    
+    margin: auto;
+  }
+
+  td,
+  th {
+    border: 1px solid rgb(190, 190, 190);
+    padding: 5px 10px;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  tr :first-child {
+    text-align: left;
+  }
+</style>
+
+<head>
+  <title>Exist OS Loader Configuration</title>
+</head>
+
+<script type="module" src="index.js"></script>
+
+<body>
+  <div class="header">ExistOS BOOT 0 Configuration</div>
+  <div class="Grid">
+    <div class="Grid-cell1">
+      <ul>
+        <li>Info</li>
+        <li>Install ExistOS</li>
+        <li>Flash</li>
+        <li>File Manager</li>
+      </ul>
+    </div>
+    <div class="Grid-cell2">
+      <div class="tabs" style="display:block;">
+        <div style="font-size:188px">¿</div>
+        Version:0.1
+        <br />
+        <a href="https://github.com/ExistOS-Team/ExistOS-For-HP39GII">Go to Github</a>
+        <br />
+        <br />
+        <input type="button" value="Reboot" onclick="fetch('reset')" />
+      </div>
+      <div class="tabs">
+        <div class="flash">
+          <form action="flash_boot0" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
+            <p>Upload BOOT0 (*.sb)</p>
+            <fieldset>
+              <input type="file" name="file" accept=".sb" />
+              <input type="submit" value="Submit" />
+            </fieldset>
+          </form>
+          <br />
+
+          <form action="flash_boot1" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
+            <p>Upload BOOT1 (*.bin)</p>
+            <fieldset>
+              <input type="file" name="file" accept=".bin,.rom" />
+              <input type="submit" value="Submit" />
+            </fieldset>
+          </form>
+          <br />
+          <form action="flash_sys" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
+            <p>Upload SYS (*.bin)</p>
+            <fieldset>
+              <input type="file" name="file" accept=".bin,.rom" />
+              <input type="submit" value="Submit" />
+            </fieldset>
+          </form>
+          <br />
+          <input type="button" value="Reboot" onclick="fetch('reset')" />
+        </div>
+      </div>
+      <div class="tabs">
+        <a href="flash_backup.ebk">Dump Flash(.ebk), Recommend using wget</a>
+        <br />
+        <br />
+        <form action="flash_erase" onsubmit="on_submit()" method="POST">
+          <p style="color:red">Erase Flash (Erase first before restoring image)</p>
+          <fieldset>
+            <input type="submit" value="Start" />
+          </fieldset>
+        </form>
+        <br />
+        <form action="flash_scan" onsubmit="on_submit()" method="POST">
+          <p>Scan Bad Block</p>
+          <fieldset>
+            <input type="submit" value="Start" />
+          </fieldset>
+        </form>
+        <br />
+        <form action="flash_all" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
+          <p>Restore Flash with image (*.ebk)</p>
+          <fieldset>
+            <input type="file" name="file" accept=".ebk" />
+            <input type="submit" value="Submit" />
+          </fieldset>
+        </form>
+      </div>
+
+      <div class="tabs">
+        <div class="fm">
+          <h3>File Manager</h3>
+          <div id="container"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="info"><!--#info--></div>
+</body>
+
+<script>
+
+  function on_submit() {
+    var node = document.createElement("div");
+    var nodeClass = document.createAttribute("class");
+    var nodeStyle = document.createAttribute("style");
+    var nodeName = document.createAttribute("name");
+    nodeName.value = "divWaiting";
+    nodeClass.value = "div-waiting";
+    nodeStyle.value = "height:" + window.innerHeight + "px; width:" + window.innerWidth + "px;";
+    node.setAttributeNode(nodeClass);
+    node.setAttributeNode(nodeStyle);
+    node.setAttributeNode(nodeName);
+    var iconNode = document.createElement("div");
+    var iconClass = document.createAttribute("class");
+    iconClass.value = "icon-waiting";
+    iconNode.setAttributeNode(iconClass);
+    node.appendChild(iconNode);
+    document.body.appendChild(node);
+  }
+
+  window.onload = function () {
+
+    var btns = document.getElementsByTagName("li");
+    var divs = document.getElementsByClassName("tabs");
+
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].onclick = function () {
+        for (var i = 0; i < btns.length; i++) {
+          if (this == btns[i]) {
+            btns[i].style.backgroundColor = "#222222";
+            btns[i].style.color = "#FFFFFF";
+            divs[i].style.display = "block";
+          } else {
+            btns[i].style.backgroundColor = "";
+            divs[i].style.display = "none";
+            btns[i].style.color = "#F57F17";
+          }
+        }
+      }
+    }
+  }
+</script>
+
+</html>
