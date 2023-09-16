@@ -1,314 +1,394 @@
 <meta charset="UTF-8">
 <html>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  body {
-    font: 100% Verdana, Arial, Helvetica, sans-serif;
-    background: #333333;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    color: #000000;
-  }
-
-  .header {
-    background-color: rgb(80, 80, 80);
-    margin-left: 0px;
-    font-size: 20px;
-    text-align: center;
-    color: #F57F17;
-    margin-left: 15%;
-    margin-right: 15%;
-  }
-
-  .info {
-    background-color: rgb(80, 80, 80);
-    font-size: 20px;
-    color: #ee4444;
-    text-align: right;
-    margin-left: 15%;
-    margin-right: 15%;
-  }
-
-  .Grid {
-    display: flex;
-    margin-top: 10px;
-  }
-
-  li {
-    height: 30px;
-    margin-top: 10px;
-    cursor: pointer;
-  }
-
-  .Grid-cell1 {
-    width: 182px;
-    background-color: rgb(80, 80, 80);
-    margin-left: 15%;
-    font-size: 20px;
-    text-align: center;
-    color: #F57F17;
-  }
-
-  .Grid-cell2 {
-    flex: 1;
-    background-color: rgb(240, 240, 240);
-    margin-left: 10px;
-    margin-right: 15%;
-  }
-
-  .Grid-cell2 {
-    height: 340px;
-  }
-
-  input {
-    font-size: 20px;
-  }
-
-  button {
-    font-size: 20px;
-  }
-
-  .flash {
-    font-size: 25px;
-  }
-
-  .tabs {
-    width: 100%;
-    height: 100%;
-    background-color: #dddddd;
-    font-size: 20px;
-    display: none;
-  }
-
-
-  @-webkit-keyframes spin {
-    to {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes spin {
-    to {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-
-  .div-waiting {
-    position: fixed;
-    z-index: 998;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.2);
-    vertical-align: middle;
-    text-align: center;
-  }
-
-  .icon-waiting {
-    position: relative;
-    top: 48%;
-    width: 5rem;
-    height: 5rem;
-    margin: 0 auto;
-    border-radius: 50%;
-    border: 0.5rem solid rgba(21, 21, 21, 0.4);
-    border-top-color: #e1e1e1;
-    -webkit-animation: 1.5s spin infinite linear;
-    animation: 1.5s spin infinite linear;
-  }
-
-  .icon-position {
-    position: relative;
-    top: 48%;
-    margin: 0 auto;
-    font-size: 30px;
-  }
-
-
-
-  thead,
-  tfoot {
-    background-color: #3f87a6;
-    color: #fff;
-  }
-
-  tbody {
-    background-color: #e4f0f5;
-  }
-
-  table {
-    border-collapse: collapse;
-    border: 2px solid rgb(200, 200, 200);
-    letter-spacing: 1px;
-    font-family: sans-serif;
-    font-size: 0.8rem;
-    
-    margin: auto;
-  }
-
-  td,
-  th {
-    border: 1px solid rgb(190, 190, 190);
-    padding: 5px 10px;
-  }
-
-  td {
-    text-align: center;
-  }
-
-  tr :first-child {
-    text-align: left;
-  }
-</style>
 
 <head>
+  <style>
+    :root {
+      /* root bg color */
+      --rbgc: #333;
+      /* panel bg color */
+      --pbgc: #555;
+      /* tab bg color */
+      --tbgc: #ddd;
+      /* fg color text 1 */
+      --fgct1: #F57F17;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      font: 100% Verdana, Arial, Helvetica, sans-serif;
+      background: var(--rbgc);
+      font-size: 1.5rem;
+    }
+
+    button,
+    input {
+      font-size: 1.5rem;
+      padding: 0.25rem;
+    }
+
+    .hidden {
+      display: none !important;
+      opacity: 0;
+    }
+
+    .flex-row,
+    .flex-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flex-col {
+      flex-direction: column;
+    }
+
+    .flex-fix {
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+
+    .flex-auto {
+      flex: 1 1 auto;
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    .h-full {
+      height: 100%;
+    }
+
+    .scroll {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .gap1 {
+      gap: 0.5rem;
+    }
+
+    .pd1 {
+      padding: 0.5rem;
+    }
+
+    .mt1 {
+      margin: 0.5rem;
+    }
+
+    .tc1 {
+      color: var(--fgct1);
+    }
+
+    .card1 {
+      background-color: var(--pbgc);
+    }
+
+    #main {
+      width: 100%;
+      max-width: 1280px;
+    }
+
+    .tab-btn {
+      width: 100%;
+      padding: 0.5rem;
+      background: transparent;
+      color: var(--fgct1);
+      border: none;
+      cursor: pointer;
+    }
+
+    .tab-btn.focus {
+      outline: none;
+      background-color: #222;
+      color: #FFF;
+    }
+
+    .tabs {
+      width: 100%;
+      height: 100%;
+      background-color: var(--tbgc);
+    }
+
+
+    @-webkit-keyframes spin {
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+
+    .div-waiting {
+      position: fixed;
+      z-index: 998;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 1;
+      background: rgba(0, 0, 0, 0.2);
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .icon-waiting {
+      position: relative;
+      top: 48%;
+      width: 5rem;
+      height: 5rem;
+      margin: 0 auto;
+      border-radius: 50%;
+      border: 0.5rem solid rgba(21, 21, 21, 0.4);
+      border-top-color: #e1e1e1;
+      -webkit-animation: 1.5s spin infinite linear;
+      animation: 1.5s spin infinite linear;
+    }
+
+    .icon-position {
+      position: relative;
+      top: 48%;
+      margin: 0 auto;
+      font-size: 30px;
+    }
+
+    /* File Manager Style */
+    .fm h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .fm hr {
+      margin: 0.5rem 0;
+    }
+
+    .fm thead,
+    .fm tfoot {
+      background-color: #3f87a6;
+      color: #fff;
+    }
+
+    .fm tbody {
+      background-color: #e4f0f5;
+    }
+
+    .fm table {
+      border-collapse: collapse;
+      border: 2px solid rgb(200, 200, 200);
+      letter-spacing: 1px;
+      font-family: sans-serif;
+      font-size: 1.5rem;
+      margin: auto;
+    }
+
+    .fm button {
+      padding: 0.25rem;
+    }
+
+    .fm td,
+    .fm th {
+      border: 1px solid rgb(190, 190, 190);
+      padding: 5px 10px;
+    }
+
+    .fm td {
+      text-align: center;
+    }
+
+    .fm td button,
+    .fm button[data-data] {
+      margin-right: 0.5rem;
+    }
+
+    .fm tr :first-child {
+      text-align: left;
+    }
+  </style>
   <title>Exist OS Loader Configuration</title>
+  <script type="module" src="file_manager.js"></script>
 </head>
 
-<script type="module" src="index.js"></script>
-
-<body>
-  <div class="header">ExistOS BOOT 0 Configuration</div>
-  <div class="Grid">
-    <div class="Grid-cell1">
-      <ul>
-        <li>Info</li>
-        <li>Install ExistOS</li>
-        <li>Flash</li>
-        <li>File Manager</li>
-      </ul>
-    </div>
-    <div class="Grid-cell2">
-      <div class="tabs" style="display:block;">
-        <div style="font-size:188px">¿</div>
-        Version:0.1
-        <br />
-        <a href="https://github.com/ExistOS-Team/ExistOS-For-HP39GII">Go to Github</a>
-        <br />
-        <br />
-        <input type="button" value="Reboot" onclick="fetch('reset')" />
+<body class="flex-col scroll w-full h-full" style="justify-content:start;">
+  <div id="main" class="flex-col gap1">
+    <div class="card1 tc1 pd1 w-full flex-fix flex-row">ExistOS BOOT 0 Configuration</div>
+    <div class="w-full flex-auto flex-row gap1" style="align-items:start;">
+      <div class="flex-fix card1 pd1 tc1 flex-col">
+        <button class="tab-btn">Info</button>
+        <button class="tab-btn">Install ExistOS</button>
+        <button class="tab-btn">Flash</button>
+        <button class="tab-btn">File Manager</button>
       </div>
-      <div class="tabs">
-        <div class="flash">
-          <form action="flash_boot0" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
-            <p>Upload BOOT0 (*.sb)</p>
-            <fieldset>
-              <input type="file" name="file" accept=".sb" />
-              <input type="submit" value="Submit" />
-            </fieldset>
-          </form>
-          <br />
-
-          <form action="flash_boot1" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
-            <p>Upload BOOT1 (*.bin)</p>
-            <fieldset>
-              <input type="file" name="file" accept=".bin,.rom" />
-              <input type="submit" value="Submit" />
-            </fieldset>
-          </form>
-          <br />
-          <form action="flash_sys" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
-            <p>Upload SYS (*.bin)</p>
-            <fieldset>
-              <input type="file" name="file" accept=".bin,.rom" />
-              <input type="submit" value="Submit" />
-            </fieldset>
-          </form>
-          <br />
-          <input type="button" value="Reboot" onclick="fetch('reset')" />
+      <div class="h-full flex-auto">
+        <div class="tabs hidden flex-col pd1">
+          <div class="flex-row">
+            <div style="font-size: 5rem; transform: rotateY(180deg);">E</div>
+            <div style="font-size: 3rem;">x</div>
+            <div style="font-size: 3rem;">i</div>
+            <div style="font-size: 3rem;">s</div>
+            <div style="font-size: 3rem;">t</div>
+            <div style="font-size: 5rem;">O</div>
+            <div style="font-size: 5rem;">S</div>
+          </div>
+          <a class="mt1" href="https://github.com/ExistOS-Team/ExistOS-For-HP39GII">Go to Github</a>
+          <input class="mt1" type="button" value="Reboot" onclick="fetch('reset')" />
+          <div class="mt1">Bootloader Page Version: 0.1</div>
         </div>
-      </div>
-      <div class="tabs">
-        <a href="flash_backup.ebk">Dump Flash(.ebk), Recommend using wget</a>
-        <br />
-        <br />
-        <form action="flash_erase" onsubmit="on_submit()" method="POST">
-          <p style="color:red">Erase Flash (Erase first before restoring image)</p>
-          <fieldset>
-            <input type="submit" value="Start" />
-          </fieldset>
-        </form>
-        <br />
-        <form action="flash_scan" onsubmit="on_submit()" method="POST">
-          <p>Scan Bad Block</p>
-          <fieldset>
-            <input type="submit" value="Start" />
-          </fieldset>
-        </form>
-        <br />
-        <form action="flash_all" method="POST" onsubmit="on_submit()" enctype="multipart/form-data">
-          <p>Restore Flash with image (*.ebk)</p>
-          <fieldset>
-            <input type="file" name="file" accept=".ebk" />
-            <input type="submit" value="Submit" />
-          </fieldset>
-        </form>
-      </div>
 
-      <div class="tabs">
-        <div class="fm">
-          <h3>File Manager</h3>
-          <div id="container"></div>
+        <div class="tabs hidden flex-col pd1">
+          <div class="flash">
+            <form class="file-form" action="flash_boot0" method="POST" enctype="multipart/form-data">
+              <p>Upload BOOT0 (*.sb)</p>
+              <fieldset>
+                <input type="file" name="file" accept=".sb" />
+                <input type="submit" value="Submit" />
+              </fieldset>
+            </form>
+            <br />
+            <form class="file-form" action="flash_boot1" method="POST" enctype="multipart/form-data">
+              <p>Upload BOOT1 (*.bin)</p>
+              <fieldset>
+                <input type="file" name="file" accept=".bin,.rom" />
+                <input type="submit" value="Submit" />
+              </fieldset>
+            </form>
+            <br />
+            <form class="file-form" action="flash_sys" method="POST" enctype="multipart/form-data">
+              <p>Upload SYS (*.bin)</p>
+              <fieldset>
+                <input type="file" name="file" accept=".bin,.rom" />
+                <input type="submit" value="Submit" />
+              </fieldset>
+            </form>
+            <br />
+            <input type="button" value="Reboot" onclick="fetch('reset')" />
+          </div>
         </div>
-      </div>
 
+        <div class="tabs hidden flex-col pd1">
+          <a href="flash_backup.ebk">Dump Flash(.ebk), Recommend using wget</a>
+          <hr class="w-full mt1" />
+          <p class="mt1" style="color:red">Erase Flash (Erase first before restoring image)</p>
+          <form class="loading-form" action="flash_erase" method="POST">
+            <input type="submit" value="Start" />
+          </form>
+          <hr class="w-full mt1" />
+          <p class="mt1">Scan Bad Block</p>
+          <form class="loading-form" action="flash_scan" method="POST">
+            <input type="submit" value="Start" />
+          </form>
+          <hr class="w-full mt1" />
+          <p class="mt1">Restore Flash with image (*.ebk)</p>
+          <form class="file-form" action="flash_all" method="POST" enctype="multipart/form-data">
+            <fieldset>
+              <input type="file" name="file" accept=".ebk" />
+              <input type="submit" value="Submit" />
+            </fieldset>
+          </form>
+        </div>
+
+        <div class="tabs hidden flex-col pd1">
+          <div class="fm">
+            <h3>File Manager</h3>
+            <div id="container"></div>
+          </div>
+        </div>
+
+      </div>
     </div>
+    <div class="info"><!--#info--></div>
   </div>
-  <div class="info"><!--#info--></div>
 </body>
 
 <script>
+  const LSKEY_TAB_ID = "__tab_id__";
 
-  function on_submit() {
-    var node = document.createElement("div");
-    var nodeClass = document.createAttribute("class");
-    var nodeStyle = document.createAttribute("style");
-    var nodeName = document.createAttribute("name");
-    nodeName.value = "divWaiting";
-    nodeClass.value = "div-waiting";
-    nodeStyle.value = "height:" + window.innerHeight + "px; width:" + window.innerWidth + "px;";
-    node.setAttributeNode(nodeClass);
-    node.setAttributeNode(nodeStyle);
-    node.setAttributeNode(nodeName);
-    var iconNode = document.createElement("div");
-    var iconClass = document.createAttribute("class");
-    iconClass.value = "icon-waiting";
-    iconNode.setAttributeNode(iconClass);
+  const hideLoadingSpinner = () => {
+    const elem = document.querySelector("#divWaiting");
+    if (elem != null) {
+      document.body.removeChild(elem);
+    }
+  };
+
+  const showLoadingSpinner = () => {
+    hideLoadingSpinner();
+    const node = document.createElement("div");
+    node.classList.add("div-waiting");
+    node.style.width = `${window.innerWidth}px`;
+    node.style.height = `${window.innerHeight}px`;
+    node.id = "divWaiting";
+    const iconNode = document.createElement("div");
+    iconNode.classList.add("icon-waiting");
     node.appendChild(iconNode);
     document.body.appendChild(node);
-  }
+  };
 
-  window.onload = function () {
-
-    var btns = document.getElementsByTagName("li");
-    var divs = document.getElementsByClassName("tabs");
-
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].onclick = function () {
-        for (var i = 0; i < btns.length; i++) {
-          if (this == btns[i]) {
-            btns[i].style.backgroundColor = "#222222";
-            btns[i].style.color = "#FFFFFF";
-            divs[i].style.display = "block";
-          } else {
-            btns[i].style.backgroundColor = "";
-            divs[i].style.display = "none";
-            btns[i].style.color = "#F57F17";
-          }
-        }
+  const onTabButtonClick = (event) => {
+    const button = event.target;
+    const btns = document.querySelectorAll(".tab-btn");
+    const tabs = document.querySelectorAll(".tabs");
+    let i = 0;
+    btns.forEach((elem, index) => {
+      if (elem === button) {
+        i = index;
+        elem.classList.add("focus");
+      } else {
+        elem.classList.remove("focus");
       }
-    }
-  }
+    });
+    tabs.forEach((tab, index) => {
+      if (i === index) {
+        tab.classList.remove("hidden");
+      } else {
+        tab.classList.add("hidden");
+      }
+    });
+    localStorage.setItem(LSKEY_TAB_ID, i.toString());
+  };
+
+  window.addEventListener("load", () => {
+    const storedTabId = localStorage.getItem(LSKEY_TAB_ID);
+    const lastTabId = Number.parseInt(storedTabId ? storedTabId : "0");
+    document.querySelectorAll(".tab-btn").forEach((btn, i) => {
+      btn.addEventListener("click", onTabButtonClick);
+      if (i === lastTabId) {
+        btn.click();
+      }
+    });
+    document.querySelectorAll(".loading-form").forEach((elem) => {
+      elem.addEventListener("submit", () => {
+        showLoadingSpinner();
+      });
+    });
+    document.querySelectorAll(".file-form").forEach((elem) => {
+      elem.addEventListener("submit", (evt) => {
+        const fromElem = evt.target;
+        const fileElem = fromElem.querySelector("input[type=file]");
+        if (fileElem.files.length <= 0) {
+          evt.preventDefault();
+          alert("Please choose a file.");
+        } else {
+          showLoadingSpinner();
+        }
+      });
+    });
+  });
+  window.addEventListener("beforeunload", hideLoadingSpinner);
 </script>
 
 </html>
