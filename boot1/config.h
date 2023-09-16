@@ -1,7 +1,8 @@
 #pragma once
 
 //#define printf(...)
-
+#undef assert
+#define assert(x) 
 #include <stdint.h>
 
 extern int pgt_size;
@@ -31,12 +32,12 @@ extern int __BOOT1_HEAD_END;
 #define PA(x)   (((uint32_t)x) & 0x000FFFFF)
 #define VA(x)   (((uint32_t)x) | 0xD0000000)
 
-#define ABT_STACK_SZ        (256)
+#define ABT_STACK_SZ        (512)
 #define UND_STACK_SZ        (256)
 #define IRQ_STACK_SZ        (256)
 #define FIQ_STACK_SZ        (16)
 #define SYS_STACK_SZ        (256)
-#define SVC_STACK_SZ        (2048+512)
+#define SVC_STACK_SZ        (2048)
 
 
 

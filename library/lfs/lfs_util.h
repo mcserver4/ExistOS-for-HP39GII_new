@@ -20,8 +20,8 @@
 #include LFS_STRINGIZE(LFS_CONFIG)
 #else
 
-//#define LFS_NO_ASSERT
-//#define LFS_NO_DEBUG
+ #define LFS_NO_ASSERT
+ #define LFS_NO_DEBUG
 // System includes
 #include <stdint.h>
 #include <stdbool.h>

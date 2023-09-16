@@ -23,6 +23,7 @@ void llprint(const char *s) {
 
 extern int _ram_start;
 extern int __HEAP_START;
+extern int _init;
 uint32_t heap_end = 0;
 
 uint8_t *heap = NULL;
@@ -31,7 +32,7 @@ caddr_t _sbrk(int incr) {
 
     if (heap == NULL) {
         heap = (uint8_t *)&__HEAP_START;
-        heap_end = (uint32_t)&_ram_start + llapi_get_ram_size();
+        heap_end = (uint32_t)&_ram_start + llapi_get_ram_size() - ((uint32_t *)&_init)[2];
     }
 
     caddr_t cur = heap;

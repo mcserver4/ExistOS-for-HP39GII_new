@@ -413,10 +413,10 @@ void __attribute__((naked)) __attribute__((target("arm"))) sys_dab()
  //   __asm volatile("orr r1,r1,#0x13");
  //   __asm volatile("msr cpsr_all,r1");
 //
-        __asm volatile("mrs r1,cpsr_all");
-        __asm volatile("bic r1,r1,#0x1f");
-        __asm volatile("orr r1,r1,#0x13");
-        __asm volatile("msr cpsr_all,r1");
+     //   __asm volatile("mrs r1,cpsr_all");
+     //   __asm volatile("bic r1,r1,#0x1f");
+     //   __asm volatile("orr r1,r1,#0x13");
+     //   __asm volatile("msr cpsr_all,r1");
     portRESTORE_CONTEXT();
 }
 
@@ -548,10 +548,10 @@ void __attribute__((naked)) __attribute__((target("arm"))) sys_pab()
    //   __asm volatile("msr cpsr_all,r1");
 
 
-        __asm volatile("mrs r1,cpsr_all");
-        __asm volatile("bic r1,r1,#0x1f");
-        __asm volatile("orr r1,r1,#0x13");
-        __asm volatile("msr cpsr_all,r1");
+      //  __asm volatile("mrs r1,cpsr_all");
+      //  __asm volatile("bic r1,r1,#0x1f");
+      //  __asm volatile("orr r1,r1,#0x13");
+      //  __asm volatile("msr cpsr_all,r1");
     portRESTORE_CONTEXT();
 }
 

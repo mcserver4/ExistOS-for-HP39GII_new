@@ -4,7 +4,10 @@
 #include "config.h"
 #include "utils.h"
 
-#include <assert.h>
+//#include <assert.h>
+
+#undef assert
+#define assert(x) 
 
 // #define page_sz  (2048)
 

@@ -22,7 +22,7 @@ target_compile_options(boot1_head.elf PRIVATE -mtune=arm926ej-s -mcpu=arm926ej-s
 target_link_libraries(boot1_head.elf PRIVATE 
 -Wl,--wrap=printf  
 lfs xprintfc umm
--nostdlib -lgcc    
+-nostdlib -lgcc  
   -nostartfiles 
 -T ${CMAKE_SOURCE_DIR}/boot1/script/ld.lds -specs=nano.specs -Wl,--gc-sections)  #-Wl,--gc-sections
  

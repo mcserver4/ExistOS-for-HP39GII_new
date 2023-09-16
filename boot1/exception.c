@@ -742,6 +742,7 @@ void volatile __attribute__((target("arm"))) pre_do_pab(uint32_t *cur_sp, uint32
             printf("[!!!PAB]FSR:%02X, at:%08lX, M:%02lX \r\n", 0xF5, cur_sp[13], get_spsr() & 0x1F);
             //while(1);
         }
+        printf("pab cursp:%08lX\r\n",(uint32_t)cur_sp);
         //printf("[ PAB]FSR:%02X, at:%08lX \r\n", 0xF5, cur_sp[13]);
         
         //  pab_lr_ptr++;
@@ -856,15 +857,15 @@ void volatile __attribute__((target("arm"))) pre_do_pab(uint32_t *cur_sp, uint32
      
         //__asm volatile("mov r7,lr");
           __asm volatile("add sp,sp,#56"); // 14*4
-              __asm volatile("mov r6,sp");
-               __asm volatile("mrs r1,cpsr_all");
-               __asm volatile("bic r1,r1,#0x1f");
-               __asm volatile("orr r1,r1,#0x1f");
-               __asm volatile("msr cpsr_all,r1");
-              //__asm volatile("mov r7,sp");
-              //__asm volatile("ldr r8,=pab_stack");
-              //__asm volatile("ldr sp,[r8]");
-              __asm volatile("mov sp,r6");
+             // __asm volatile("mov r6,sp");
+             //  __asm volatile("mrs r1,cpsr_all");
+             //  __asm volatile("bic r1,r1,#0x1f");
+             //  __asm volatile("orr r1,r1,#0x1f");
+             //  __asm volatile("msr cpsr_all,r1");
+             // //__asm volatile("mov r7,sp");
+             // //__asm volatile("ldr r8,=pab_stack");
+             // //__asm volatile("ldr sp,[r8]");
+             // __asm volatile("mov sp,r6");
         //__asm volatile("mov lr,r7");
 
 
@@ -932,7 +933,7 @@ void volatile __attribute__((target("arm"))) pre_do_dab(uint32_t *cur_sp, uint32
             printf("[!!!dab]FSR:%02lX, access:%08lx, at:%08lX,  M:%02lX \r\n", FSR, faultAddress, cur_sp[13], get_spsr() & 0x1F);
             //while(1);
         }    
-        
+        printf("dab cursp:%08lX\r\n",(uint32_t)cur_sp);
         //printf("sys_dab_base:%08lX\r\n", ((uint32_t *)sys_dab_base)[0]);
         
         //printf("[  dab]FSR:%02lX, access:%08lx, at:%08lX\r\n", FSR, faultAddress, cur_sp[13]);
@@ -977,7 +978,7 @@ void volatile __attribute__((target("arm"))) pre_do_dab(uint32_t *cur_sp, uint32
       //  printf("dab fault mode:%02lX\r\n", get_spsr() & 0x1F);
           //printf("dab cursp:%08lX\r\n",(uint32_t)cur_sp);
         
-      //  printf("b1 dab_context_ptr:%08lX\r\n", (uint32_t)dab_context_ptr);
+       printf("b1 dab_context_ptr:%08lX\r\n", (uint32_t)dab_context_ptr);
            for(int i = 0; i <=  12; i++)
            {
                dab_context_ptr[i+1] = cur_sp[i];
@@ -1053,12 +1054,13 @@ void volatile __attribute__((target("arm"))) pre_do_dab(uint32_t *cur_sp, uint32
     
            //__asm volatile("mov r7,lr"); 
             __asm volatile("add sp,sp,#56"); // 14*4
-               __asm volatile("mov r6,sp");
-                   __asm volatile("mrs r1,cpsr_all");
-                   __asm volatile("bic r1,r1,#0x1f");
-                   __asm volatile("orr r1,r1,#0x1f");
-                   __asm volatile("msr cpsr_all,r1");
-                 __asm volatile("mov sp,r6");
+                 //  __asm volatile("mov r6,sp");
+                 //      __asm volatile("mrs r1,cpsr_all");
+                 //      __asm volatile("bic r1,r1,#0x1f");
+                 //      __asm volatile("orr r1,r1,#0x1f");
+                 //      __asm volatile("msr cpsr_all,r1");
+                 //    __asm volatile("mov sp,r6");
+                 //    __asm volatile("sub sp,sp,#72");
             //     __asm volatile("ldr r8,=dab_stack");
             //     __asm volatile("ldr sp,[r8]");
            //__asm volatile("mov lr,r7");

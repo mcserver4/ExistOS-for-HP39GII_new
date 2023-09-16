@@ -7,6 +7,9 @@
 #include <errno.h>
 #include <stdlib.h>
 
+#undef assert
+#define assert(x) 
+
 #define CACHE (true)
 #define BUFFER (true)
 
