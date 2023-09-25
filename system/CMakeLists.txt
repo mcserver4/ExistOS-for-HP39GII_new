@@ -54,8 +54,8 @@ ADD_LIBRARY(tinyusb_sys ${TINYUSB_SRCS})
 target_link_libraries(sys.elf PRIVATE 
 -Wl,--wrap=_malloc_r 
 -Wl,--wrap=_free_r 
--Wl,--wrap=printf 
--Wl,--wrap=_printf_r
+#-Wl,--wrap=printf 
+#-Wl,--wrap=_printf_r
 #-Wl,--wrap=_calloc_r
 #-Wl,--wrap=_realloc_r
  lwip_sys tinyusb_sys freertos xprintfc

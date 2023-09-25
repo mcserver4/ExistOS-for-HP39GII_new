@@ -23,6 +23,8 @@ typedef struct app_api_info_t
 }app_api_info_t;
 
 
+void app_recover_from_status(char *name);
+
 void app_pre_start(char *path, bool sideload, uint32_t sideload_sz);
 
 void app_api_init();
@@ -34,3 +36,13 @@ uint32_t app_get_ram_size();
 void app_stop();
 
 void app_start();
+
+
+//utils blk
+typedef struct ExpStatus_t{
+    char appName[64];
+    char appFilePath[1024];
+    uint8_t appScreenshot[128*64];
+    uint32_t memorySize;
+    uint32_t memoryAllocStart;
+}ExpStatus_t;

@@ -25,6 +25,8 @@ DECDEF_LLAPI_SWI(uint32_t,      llapi_rtc_set_s,             (uint32_t s),      
 DECDEF_LLAPI_SWI(void,          llapi_disp_put_point,        (uint32_t x, uint32_t y, int c),    LLAPI_APP_DISP_PUT_P)
 DECDEF_LLAPI_SWI(int,           llapi_disp_get_point,        (uint32_t x, uint32_t y),           LLAPI_APP_DISP_GET_P)
 DECDEF_LLAPI_SWI(void,          llapi_disp_put_hline,        (uint32_t y, char *dat),            LLAPI_APP_DISP_PUT_HLINE)
+//DECDEF_LLAPI_SWI(void,          llapi_disp_put_buffer,       (uint8_t* buffer,uint32_t width,uint32_t height,Coords *coord),LLAPI_APP_DISP_PUT_BUFFER);
+//bsp_display_put_buffer(uint8_t* buffer,uint32_t width,uint32_t height,uint32_t dstX,uint32_t dstY)
 
 DECDEF_LLAPI_SWI(uint32_t,      llapi_fs_get_dirobj_sz,      (void)                                      ,LL_SWI_FS_GET_DIROBJ_SZ      );
 DECDEF_LLAPI_SWI(uint32_t,      llapi_fs_get_fobj_sz,        (void)                                      ,LL_SWI_FS_GET_FOBJ_SZ        );

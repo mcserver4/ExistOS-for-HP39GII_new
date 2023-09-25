@@ -3,6 +3,7 @@
 #include "app_runtime.h"
 #include "queue.h"
 #include "../apps/llapi.h"
+#include "app_utils.h"
 
 QueueHandle_t app_api_queue;
 
@@ -14,8 +15,14 @@ static StaticTask_t app_tcb;
 static TaskHandle_t app_task_handle = NULL;
 static int mmap = 0;
 
+static char *app_name=NULL;
+static int app_mem_limit=380;//(KB)
+
 //static char mmaps[6];
 uint32_t app_stack_sz = 0; 
+
+
+
 
 
 bool app_is_running()
@@ -52,8 +59,49 @@ static void app_main_thread(void *par) {
     }
 }
 
-
 mmap_info mf;
+
+void app_save_status(){
+    //open file
+    //app_create_folder();
+    fs_obj_t f = malloc(ll_fs_get_fobj_sz());
+    char path[256]={0};
+    strcpy(path,"/expcache/");
+    strcat(path,app_name);
+    strcat(path,".expdat");
+    int res = ll_fs_open(f, path, O_CREAT|O_WRONLY);
+    if(res)
+    {
+        free(f);
+        return;
+    }
+    //memcpy(dest, &app_tcb, sizeof(StaticTask_t));
+    //file structure
+    //[header|tcbStatus|memory]
+    ExpStatus_t *stat = malloc(sizeof(ExpStatus_t));
+    strcpy(stat->appName,app_name);
+    strcpy(stat->appFilePath,mf.path);
+    stat->memorySize=app_mem_size;
+    stat->memoryAllocStart=app_mem_warp_at;
+    //llapi_disp_get_point()
+
+    for(int y=0;y<64;y++){
+        for(int x=0;x<128;x++){
+            stat->appScreenshot[x+y*64]=(uint8_t)bsp_display_get_point(y*2, x*2);
+        }
+    }
+    //cpy Header to dstFile
+    ll_fs_write(f,stat,sizeof(ExpStatus_t));
+    //cpy TCB to dstFile
+    ll_fs_write(f,&app_tcb,sizeof(StaticTask_t));
+    //cpy mem to dstFile
+    ll_fs_write(f,app_mem_warp_alloc,app_mem_size);
+    
+    ll_fs_close(f);
+    free(f);
+    free(stat);
+
+}
 
 void app_stop()
 {
@@ -65,6 +113,8 @@ void app_stop()
 
     vTaskSuspendAll();
 
+    app_save_status();
+
     free((void *)mf.path);
 
 
@@ -75,6 +125,8 @@ void app_stop()
     ll_set_app_mem_warp(0, 0);
     free(app_mem_warp_alloc);
     app_mem_warp_alloc = NULL;
+    free(app_name);
+    app_name = NULL;
 
     app_running = false;
     app_task_handle = NULL;
@@ -105,6 +157,119 @@ static void app_rom_read(void *p)
     rdVal = ((uint32_t *)p)[0];
     vTaskDelay(pdMS_TO_TICKS(100));
     vTaskDelete(NULL);
+}
+
+
+void app_recover_from_status(char *name){
+
+
+    fs_obj_t f = malloc(ll_fs_get_fobj_sz());
+    char path[256]={0};
+    strcpy(path,"/expcache/");
+    strcat(path,name);
+    int res = ll_fs_open(f, path, O_RDONLY);
+    if(res)
+    {
+        free(f);
+        return;
+    }
+    ExpStatus_t *stat = malloc(sizeof(ExpStatus_t));
+    ll_fs_read(f,stat,sizeof(ExpStatus_t));
+    
+    fs_obj_t appFile = malloc(ll_fs_get_fobj_sz());
+
+    res = ll_fs_open(appFile, stat->appFilePath, O_RDONLY);//ensure the original Expfile still exist
+    if(res)
+    {
+        free(appFile);
+        return;
+    }
+    free(appFile);
+
+    app_pre_start(stat->appFilePath,false,0);
+
+
+    if(app_running)
+    {
+        return;
+    }
+    if(mmap <= 0)
+    {
+        return;
+    }
+
+    bsp_diaplay_clean(0xFF); 
+
+    uint32_t *stackSz = (uint32_t *)(APP_ROM_MAP_ADDR + 8);
+    TaskHandle_t task_app_rom_read;
+    xTaskCreate(app_rom_read, "app_rom_read", 32, stackSz, 2, &task_app_rom_read);
+    vTaskDelay(pdMS_TO_TICKS(200));
+    int i = 0;
+    while (rdVal == 0)
+    {
+        vTaskDelay(pdMS_TO_TICKS(500));
+        i++;
+        if(i > 10)
+        {
+            break;
+        }
+    }
+    if(rdVal != 0xE1A00000)
+    {
+        app_stack_sz = rdVal;
+        printf("SET Stack Size:%ld\r\n", app_stack_sz );
+    }
+
+    if(app_stack_sz == 0)
+    {
+        app_stack_sz = 400;
+    }
+
+    vTaskSuspendAll();
+    uint32_t free_mem = getFreeMemSz() - 12*1024;//free memory-12KB
+    //free_mem = free_mem>=app_mem_limit*1024?app_mem_limit*1024:free_mem;
+    //free memory limited to app_mem_limit(KB)
+    //recover from status would not need to limit memory
+    if(stat->memorySize>free_mem)
+    {
+        //err:insufficient memory
+        free(f);
+        free(stat);
+        return;
+    }
+    free_mem=stat->memorySize;
+
+
+    app_mem_warp_alloc = malloc(free_mem);
+    app_mem_warp_at = (uint32_t)app_mem_warp_alloc;
+    while((app_mem_warp_at % 1024))
+    {
+        app_mem_warp_at++;
+    }  
+    app_mem_size = (free_mem/1024) - 1;
+    ll_set_app_mem_warp(app_mem_warp_at, app_mem_size);
+    app_mem_size = app_mem_size * 1024;
+
+    printf("Allocate App Mem:%ld\r\n", app_mem_size);
+     app_task_handle = xTaskCreateStatic(
+         app_main_thread, 
+          "app_t0", 
+          app_stack_sz, 
+          NULL, 1,
+          (StackType_t *const)(APP_RAM_MAP_ADDR  + app_mem_size - app_stack_sz * 4 - 4) , &app_tcb); //APP_RAM_MAP_ADDR  + app_mem_size - 4 - app_stack_sz * 4
+    //xTaskCreate(app_main_thread, "app_t0", 400, NULL, 1, &app_task_handle);
+    
+    ll_fs_read(f,&app_tcb,sizeof(StaticTask_t));
+
+    ll_fs_read(f,app_mem_warp_alloc,stat->memorySize);
+    
+    ll_fs_close(f);
+    free(f);
+
+    xTaskResumeAll();
+    app_running = true;
+    gdb_attach_to_task(app_task_handle);
+    //
 }
 
 void app_start()
@@ -146,7 +311,10 @@ void app_start()
     }
 
     vTaskSuspendAll();
-    uint32_t free_mem = getFreeMemSz() - 12*1024;
+    uint32_t free_mem = getFreeMemSz() - 12*1024;//free memory-12KB
+    free_mem = free_mem>=app_mem_limit*1024?app_mem_limit*1024:free_mem;//free memory limited to app_mem_limit(KB)
+    //recover from status would not need to limit memory
+
     app_mem_warp_alloc = malloc(free_mem);
     app_mem_warp_at = (uint32_t)app_mem_warp_alloc;
     while((app_mem_warp_at % 1024))
@@ -166,6 +334,8 @@ void app_start()
           (StackType_t *const)(APP_RAM_MAP_ADDR  + app_mem_size - app_stack_sz * 4 - 4) , &app_tcb); //APP_RAM_MAP_ADDR  + app_mem_size - 4 - app_stack_sz * 4
     //xTaskCreate(app_main_thread, "app_t0", 400, NULL, 1, &app_task_handle);
     
+
+
     xTaskResumeAll();
     app_running = true;
     gdb_attach_to_task(app_task_handle);
@@ -187,7 +357,6 @@ uint32_t app_get_exp_sz(char *path)
     return sz;
 }
 
-
 void app_pre_start(char *path, bool sideload, uint32_t sideload_sz)
 {
     
@@ -206,6 +375,8 @@ void app_pre_start(char *path, bool sideload, uint32_t sideload_sz)
         mf.path = calloc(1, 64);
         strncpy((char *)mf.path, path, 63);
         uint32_t expSz = app_get_exp_sz(path);
+        //get_app_name(path,app_name);
+
         //int32_t remainSz = expSz;
         printf("app rom sz:%d\r\n", expSz);
         mf.size = 0;
@@ -239,6 +410,7 @@ void app_pre_start(char *path, bool sideload, uint32_t sideload_sz)
     //mmap = ll_mmap(&mf);
     
 }
+
 
 
 struct task_delay_info_t

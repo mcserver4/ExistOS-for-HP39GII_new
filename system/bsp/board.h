@@ -25,6 +25,11 @@
 
 #define DMA_MEM  __attribute__ (( section(".dma_ram") ))
 
+typedef struct Coords_t
+{
+    uint32_t x;
+    uint32_t y;
+}Coords_t;
 
 #define INFO(...) do{printf(__VA_ARGS__);}while(0)
 
@@ -74,6 +79,7 @@ void bsp_display_putk_string(uint32_t x, uint32_t y, char *s, uint32_t fg, uint3
 void bsp_diaplay_clean(uint32_t c);
 void bsp_display_set_point(uint32_t x, uint32_t y, uint32_t c);
 uint32_t bsp_display_get_point(uint32_t x, uint32_t y);
+void bsp_display_put_buffer(uint8_t *dat,uint32_t width,uint32_t height,Coords_t *coords);
 void bsp_diaplay_put_hline(uint32_t y, void *dat);
 void bsp_display_flush();
 

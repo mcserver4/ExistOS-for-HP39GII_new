@@ -16,6 +16,8 @@
 #include "app_runtime.h"
 #include "sideload_server.h"
 
+#include "app_utils.h"
+
 int coremain();
 
 extern bool sys_state_print;
@@ -112,9 +114,9 @@ void sys() {
 
     bsp_diaplay_clean(0xFF); 
 
+    appUtilsInit();
     //uint8_t *p = calloc(1,370*1024);
     //volatile uint8_t *q = (volatile uint8_t *)p+2048;
-
    // register uint32_t tk asm("r0");
     while (1) {
 
@@ -182,10 +184,13 @@ int main() {
 
     sys_mmap_init();
 
+    
     xTaskCreate(SysMonitor, "SysMonitor", configMINIMAL_STACK_SIZE, (void *)60, configMAX_PRIORITIES - 1, NULL);
     xTaskCreate(sys, "sys", configMINIMAL_STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL);
-    xTaskCreate(usbTask, "TinyUsb", 370, NULL, configMAX_PRIORITIES - 2, NULL); 
+    xTaskCreate(usbTask, "TinyUsb", 370, NULL, configMAX_PRIORITIES - 2, NULL);
+    
 
+    
     vTaskStartScheduler();
     while (1)
         ;

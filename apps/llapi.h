@@ -23,7 +23,7 @@
 #define LLAPI_APP_QUERY_KEY                (LLAPI_SWI_BASE + 9)
 #define LLAPI_APP_RTC_GET_S                (LLAPI_SWI_BASE + 10)
 #define LLAPI_APP_RTC_SET_S                (LLAPI_SWI_BASE + 11)
-
+//#define LLAPI_APP_DISP_PUT_BUFFER           (LLAPI_SWI_BASE + 12)
 
 #define LL_SWI_FS_SIZE                 (LL_SWI_BASE + 119)
 #define LL_SWI_FS_REMOVE               (LL_SWI_BASE + 120)
@@ -59,8 +59,13 @@
 
 typedef void* fs_obj_t;
 typedef void* fs_dir_obj_t;
-
-
+/*
+typedef struct Coords
+{
+    uint32_t x;
+    uint32_t y;
+}Coords;
+*/
 #ifdef __cplusplus
     extern "C" {
 #endif
@@ -78,6 +83,7 @@ DECDEF_LLAPI_SWI(uint32_t,      llapi_rtc_set_s,             (uint32_t s),      
 DECDEF_LLAPI_SWI(void,          llapi_disp_put_point,        (uint32_t x, uint32_t y, int c),             LLAPI_APP_DISP_PUT_P)
 DECDEF_LLAPI_SWI(int,           llapi_disp_get_point,        (uint32_t x, uint32_t y),                    LLAPI_APP_DISP_GET_P)
 DECDEF_LLAPI_SWI(void,          llapi_disp_put_hline,        (uint32_t y, char *dat),                     LLAPI_APP_DISP_PUT_HLINE)
+//DECDEF_LLAPI_SWI(void,          llapi_disp_put_buffer,       (uint8_t* buffer,uint32_t width,uint32_t height,Coords *coord),LLAPI_APP_DISP_PUT_BUFFER);
 
 DECDEF_LLAPI_SWI(uint32_t,      llapi_fs_get_dirobj_sz,      (void)                                      ,LL_SWI_FS_GET_DIROBJ_SZ      );
 DECDEF_LLAPI_SWI(uint32_t,      llapi_fs_get_fobj_sz,        (void)                                      ,LL_SWI_FS_GET_FOBJ_SZ        );

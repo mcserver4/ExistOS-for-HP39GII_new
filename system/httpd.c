@@ -20,7 +20,7 @@
 extern unsigned char const bmpHead_256127[1078];
 uint8_t stdout_rb_read();
 
-bool sys_state_print = false;
+bool sys_state_print = true;
 
 #define CMP_CMD_PREFIX(x)   memcmp(name,(x),sizeof(x))==0
 

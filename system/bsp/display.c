@@ -605,6 +605,32 @@ void bsp_diaplay_put_hline(uint32_t y, void *dat)
     lcd_write_line(cur_line);
 }
 
+void bsp_display_put_buffer(uint8_t *dat,uint32_t width,uint32_t height,Coords_t *coords)
+{
+    int coordsX=0,coordsY=0;
+    if(coords!=NULL){
+        coordsX=coords->x;
+        coordsY=coords->y;
+    }
+
+    for(int i=0;i<height;i++)
+    {
+        if(coordsY+i<0)
+            i=-coordsY;
+        if(coordsY+i>SCREEN_HEIGHT)
+            return;
+
+        for(int j=0;j<width;j++){
+            if(coordsX+j<0)
+                j=-coordsX;
+            if(coordsX+j>=SCREEN_WIDTH)
+                continue;
+            
+            bsp_display_set_point(coordsX+j,coordsY+i,*(dat+j+width*i));
+        }
+    }
+}
+
 void bsp_display_putk_string(uint32_t x, uint32_t y, char *s, uint32_t fg, uint32_t bg)
 {
     uint32_t str_len = strlen(s);
@@ -615,6 +641,7 @@ void bsp_display_putk_string(uint32_t x, uint32_t y, char *s, uint32_t fg, uint3
     for (int n = 0; n < str_len; n++)
     {
         char c = s[n];
+        if((c>'~')||(c<' '))continue;
         uint32_t ch = c - ' ';
         uint8_t *p = &font[fontSize * ch];
         for (int y_ = 0; y_ < fontSize; y_++)

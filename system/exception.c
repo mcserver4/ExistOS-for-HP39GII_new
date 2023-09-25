@@ -176,6 +176,10 @@ void __attribute__((naked)) __attribute__((target("arm"))) sys_svc()
     case LLAPI_APP_QUERY_KEY:
         pRegFram[0 + 2] = sys_query_key();
         break;
+/*    case LLAPI_APP_DISP_PUT_BUFFER:
+        bsp_display_put_buffer((uint8_t *)pRegFram[0 + 2],pRegFram[1 + 2],pRegFram[2 + 2],(Coords_t*)pRegFram[3 + 2]);
+        break;*/
+    
     case 0x55:
         vTaskSwitchContext(); 
         break;
@@ -413,10 +417,10 @@ void __attribute__((naked)) __attribute__((target("arm"))) sys_dab()
  //   __asm volatile("orr r1,r1,#0x13");
  //   __asm volatile("msr cpsr_all,r1");
 //
-     //   __asm volatile("mrs r1,cpsr_all");
-     //   __asm volatile("bic r1,r1,#0x1f");
-     //   __asm volatile("orr r1,r1,#0x13");
-     //   __asm volatile("msr cpsr_all,r1");
+        __asm volatile("mrs r1,cpsr_all");
+        __asm volatile("bic r1,r1,#0x1f");
+        __asm volatile("orr r1,r1,#0x13");
+        __asm volatile("msr cpsr_all,r1");
     portRESTORE_CONTEXT();
 }
 
@@ -548,10 +552,10 @@ void __attribute__((naked)) __attribute__((target("arm"))) sys_pab()
    //   __asm volatile("msr cpsr_all,r1");
 
 
-      //  __asm volatile("mrs r1,cpsr_all");
-      //  __asm volatile("bic r1,r1,#0x1f");
-      //  __asm volatile("orr r1,r1,#0x13");
-      //  __asm volatile("msr cpsr_all,r1");
+        __asm volatile("mrs r1,cpsr_all");
+        __asm volatile("bic r1,r1,#0x1f");
+        __asm volatile("orr r1,r1,#0x13");
+        __asm volatile("msr cpsr_all,r1");
     portRESTORE_CONTEXT();
 }
 
